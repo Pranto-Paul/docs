@@ -1,6 +1,14 @@
 "use client";
 import { useEditor, EditorContent } from "@tiptap/react";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import { Table } from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import ImageResize from "tiptap-extension-resize-image";
+import TableRow from "@tiptap/extension-table-row";
 import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
 
 const Editor = () => {
   const editor = useEditor({
@@ -11,8 +19,40 @@ const Editor = () => {
         style: "padding-left: 56px; padding-right: 56px;",
       },
     },
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
+    extensions: [
+      StarterKit,
+      ImageResize,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: "max-w-full h-auto cursor-pointer",
+          style: "max-width: 100%; height: auto;",
+        },
+      }),
+      TaskItem.configure({ nested: true }),
+      TaskList,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
+    content: `
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th colspan="3">Description</th>
+            </tr>
+            <tr>
+              <td>Cyndi Lauper</td>
+              <td>Singer</td>
+              <td>Songwriter</td>
+              <td>Actress</td>
+            </tr>
+          </tbody>
+        </table>
+      `,
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
